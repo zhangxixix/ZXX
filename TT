@@ -1,0 +1,87 @@
+package cn.sean.test;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+//有42点，随机分配四个人，每个人都有最大上限例如15；公平随机
+
+public class TT
+{
+    public static void main(String[] args)
+    {
+        // Random r = new Random();
+        // System.out.println(r.nextInt(2) + 1);
+
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        list.add(1);
+        // total为42-4
+        list = allot(38, 4, 15, list);
+
+        System.out.println(list);
+        int sum=0;
+        for(Integer i:list){
+            sum+=i;
+        }
+        System.out.println(sum);
+
+    }
+
+    public static List<Integer> allot(int total, int num, int max, List<Integer> list)
+    {
+        int remain = total;
+
+        Random r = new Random();
+        int score = 0;
+        int l = 0;
+        
+        for (int i = 0; i < num; i++)
+        {
+            l = list.get(i);
+            if (l < max)
+            {
+
+                if (remain < 0)
+                {
+                    score = 0;
+                }
+                else
+                {
+                    score = r.nextInt(max);
+                }
+
+                if (score > remain)
+                {
+                    score = remain;
+                }
+
+                if ((l + score) > max)
+                {
+                    list.set(i, max);
+                    remain -= (max - l);
+                }
+                else
+                {
+                    remain -= score;
+                    list.set(i, l + score);
+
+                }
+
+            }
+        }
+
+        if (remain > 0)
+        {
+            list = allot(remain, num, max, list);
+        }
+
+        Collections.shuffle(list);
+
+        return list;
+    }
+
+}
